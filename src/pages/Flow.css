@@ -1,0 +1,437 @@
+
+/* Production Flow — reference-aligned, independently positioned manufacturing lanes. */
+
+.pf-shell {
+  width: 100%;
+  margin-top: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: #10171c;
+}
+
+.pf-scroll-hint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 16px;
+  border-bottom: 1px solid rgba(160, 180, 190, 0.12);
+  color: var(--muted);
+  font-size: 11.5px;
+}
+
+.pf-scroll-hint span:first-child {
+  color: var(--text);
+  font-weight: 650;
+}
+
+.pf-scroll {
+  max-width: 100%;
+  overflow: auto;
+  padding: 18px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+
+.pf-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.pf-scroll::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: var(--border2);
+}
+
+.pf-stage {
+  position: relative;
+  isolation: isolate;
+  min-width: max-content;
+  min-height: 120px;
+}
+
+.pf-lane-outline {
+  position: absolute;
+  z-index: 0;
+  border: 1px solid rgba(160, 180, 190, 0.13);
+  border-radius: 19px;
+  background: rgba(255, 255, 255, 0.012);
+  pointer-events: none;
+}
+
+.pf-connectors {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.pf-link {
+  fill: none;
+  stroke: #84919a;
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.92;
+}
+
+.pf-join circle {
+  fill: #151c21;
+  stroke: #52616b;
+  stroke-width: 1.4;
+}
+
+.pf-join text {
+  fill: #d7dde1;
+  font-family: var(--sans);
+  font-size: 19px;
+  font-weight: 450;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.pf-positioned-node {
+  position: absolute;
+  z-index: 2;
+}
+
+.pf-card {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--idle-line);
+  border-radius: 12px;
+  background: #252e34;
+  color: var(--text);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+}
+
+.pf-card.t-ok {
+  border-color: var(--ok-line);
+  background: var(--ok-bg);
+}
+
+.pf-card.t-wait {
+  border-color: var(--wait-line);
+  background: var(--wait-bg);
+}
+
+.pf-card.t-bad {
+  border-color: var(--bad-line);
+  background: var(--bad-bg);
+}
+
+.pf-card.t-idle {
+  border-color: var(--idle-line);
+  background: #252e34;
+}
+
+.pf-output-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 12px 9px;
+}
+
+.pf-output-heading {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  text-align: center;
+}
+
+.pf-item-name {
+  display: -webkit-box;
+  max-width: 100%;
+  overflow: hidden;
+  color: #f4f6f7;
+  font-size: 14px;
+  font-weight: 680;
+  line-height: 1.22;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.pf-item-nature {
+  color: rgba(231, 237, 240, 0.7);
+  font-size: 10px;
+  font-weight: 550;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.pf-embedded-operation {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  margin: 3px 0 2px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(160, 180, 190, 0.18);
+  cursor: pointer;
+  text-align: center;
+}
+
+.pf-embedded-operation strong {
+  max-width: 100%;
+  overflow: hidden;
+  color: rgba(244, 246, 247, 0.92);
+  font-size: 10.5px;
+  font-weight: 650;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-embedded-operation span {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 9.5px;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-output-footer {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  white-space: nowrap;
+}
+
+.pf-metric {
+  overflow: hidden;
+  color: rgba(241, 245, 247, 0.86);
+  font-size: 11.5px;
+  font-weight: 550;
+  text-align: center;
+  text-overflow: ellipsis;
+}
+
+.pf-state {
+  flex: 0 0 auto;
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 10px;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-state-ok {
+  color: #b5eb75;
+}
+
+.pf-state-wait {
+  color: #ffd46c;
+}
+
+.pf-state-bad {
+  color: #ff9999;
+}
+
+.pf-state-idle {
+  color: #c1cbd1;
+}
+
+.pf-operation-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 8px 12px;
+  text-align: center;
+}
+
+.pf-operation-name {
+  display: -webkit-box;
+  max-width: 100%;
+  overflow: hidden;
+  color: #f2f5f6;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.pf-operation-state {
+  font-size: 11px;
+  line-height: 1.25;
+}
+
+.pf-operation-meta {
+  display: -webkit-box;
+  max-width: 100%;
+  overflow: hidden;
+  color: rgba(227, 234, 238, 0.72);
+  font-size: 10px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.pf-material-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5px 10px;
+}
+
+.pf-material-heading {
+  padding: 2px 3px 5px;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.pf-material-rows {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.pf-material-rows.is-single .pf-material-row {
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  text-align: center;
+}
+
+.pf-material-rows.is-single .pf-material-copy {
+  align-items: center;
+  max-width: 100%;
+}
+
+.pf-material-rows.is-single .pf-material-copy strong {
+  max-width: 100%;
+  font-size: 13px;
+  text-align: center;
+}
+
+.pf-material-rows.is-single .pf-material-stock {
+  align-items: center;
+  font-size: 11px;
+  text-align: center;
+}
+
+.pf-material-row {
+  display: flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 2px;
+}
+
+.pf-material-row + .pf-material-row {
+  border-top: 1px solid rgba(160, 180, 190, 0.16);
+}
+
+.pf-material-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pf-material-copy strong {
+  overflow: hidden;
+  color: #f2f5f6;
+  font-size: 12px;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-material-copy small,
+.pf-material-stock small {
+  color: var(--muted);
+  font-size: 9.5px;
+}
+
+.pf-material-stock {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  font-size: 10.5px;
+  font-weight: 600;
+  text-align: right;
+}
+
+.pf-material-stock.pf-state-ok {
+  color: #b5eb75;
+}
+
+.pf-material-stock.pf-state-bad {
+  color: #ff9999;
+}
+
+.pf-legend {
+  margin: 12px 0 14px;
+}
+
+.pf-no-flow-wrap {
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #10171c;
+}
+
+.pf-no-flow-card {
+  display: flex;
+  max-width: 600px;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin: 0 auto;
+}
+
+.pf-no-flow-card > .pf-output-card {
+  width: 260px;
+  height: 86px;
+}
+
+.pf-no-flow-copy {
+  max-width: 560px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .pf-scroll-hint {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .pf-scroll {
+    padding: 14px;
+  }
+
+  .pf-no-flow-wrap {
+    padding: 16px;
+  }
+}
